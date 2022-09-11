@@ -25,4 +25,10 @@ public class EmployeeController {
         R<Employee> data = employeeService.login(request, employee);
         return data;
     }
+
+    @PostMapping("/logout")
+    public R<String> logout(HttpServletRequest request){
+        R<String> logout = employeeService.logout(request);
+        return logout;
+    }
 }
