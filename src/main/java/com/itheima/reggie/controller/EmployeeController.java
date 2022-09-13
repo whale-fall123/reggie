@@ -1,14 +1,12 @@
 package com.itheima.reggie.controller;
 
-import com.itheima.reggie.commen.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.itheima.reggie.common.R;
 import com.itheima.reggie.entity.Employee;
 import com.itheima.reggie.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,4 +29,29 @@ public class EmployeeController {
         R<String> logout = employeeService.logout(request);
         return logout;
     }
+
+    @PostMapping
+    public R<String> save(HttpServletRequest request,@RequestBody Employee employee){
+        R<String> save = employeeService.save(request, employee);
+        return save;
+    }
+
+    @GetMapping("/page")
+    public R<Page> page(int page, int pageSize, String name){
+        R<Page> r = employeeService.page(page, pageSize, name);
+        return r;
+    }
+
+    @PutMapping
+    public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
+        R<String> update = employeeService.update(request, employee);
+        return update;
+    }
+
+    @GetMapping("/{id}")
+    public R<Employee> getById(@PathVariable Long id){
+        R<Employee> employee = employeeService.getById(id);
+        return employee;
+    }
+
 }
