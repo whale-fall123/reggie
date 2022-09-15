@@ -1,7 +1,6 @@
 package com.itheima.reggie.common;
 
 import lombok.Data;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.HashMap;
 import java.util.Map;

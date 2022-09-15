@@ -12,12 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -26,8 +22,13 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     @Autowired
     private EmployeeMapper employeeMapper;
 
+    /*用EmployeeService的话就要把接口的方法名改成getId*/
+    /*@Autowired
+    private EmployeeService employeeService;*/
+    //以后不要自动装载调用自己，直接用this.
+
     //登录
-    public R<Employee> login(HttpServletRequest request, @RequestBody Employee employee){
+    public R<Employee> login(HttpServletRequest request, Employee employee){
         String password = employee.getPassword();
         password = DigestUtils.md5DigestAsHex(password.getBytes());
 
@@ -57,19 +58,19 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         return R.success("退出成功");
     }
 
-    //新增员工
-    public R<String> save(HttpServletRequest request,@RequestBody Employee employee){
+    //新增成员
+    public R<String> save(HttpServletRequest request, Employee employee){
         log.info("新增员工，员工信息：{}",employee.toString());
 
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
 
-        employee.setCreateTime(LocalDateTime.now());
+        /*employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
 
         Long empId = (Long) request.getSession().getAttribute("employee");
 
         employee.setCreateUser(empId);
-        employee.setUpdateUser(empId);
+        employee.setUpdateUser(empId);*/
 
         employeeMapper.insert(employee);
         return R.success("新增员工成功");
@@ -92,27 +93,26 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         return R.success(pageInfo);
     }
 
-    //修改员工信息
-    public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
+    //修改信息
+    public R<String> update(HttpServletRequest request, Employee employee){
         log.info(employee.toString());
 
-        Long empId = (Long)request.getSession().getAttribute("employee");
+        /*Long empId = (Long)request.getSession().getAttribute("employee");
 
         employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(empId);
+        employee.setUpdateUser(empId);*/
         employeeMapper.updateById(employee);
 
         return R.success("员工信息修改成功");
 
     }
 
-    //根据id查询员工
-    @GetMapping("/{id}")
-    public R<Employee> getById(@PathVariable Long id) {
+    //根据id查询
+    public R<Employee> getById(Long id) {
         Employee employee = employeeMapper.selectById(id);
         if(employee != null){
             return R.success(employee);
         }
-        return R.error("没有查询到对应员工信息");
+        return null;
     }
 }
